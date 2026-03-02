@@ -19,16 +19,6 @@ The project demonstrates a complete end-to-end machine learning pipeline, includ
 * JSON and PDF report generation
 * Interactive web interface using Streamlit
 
----
-
-## Instruments Supported
-
-The current trained model detects:
-
-* Piano
-* Acoustic Guitar
-* Electric Guitar
-* Violin
 
 ---
 
