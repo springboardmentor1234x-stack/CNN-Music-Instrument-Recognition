@@ -76,28 +76,6 @@ InstruNet-AI/
 
 ---
 
-## Installation and Setup
-
-### 1. Clone the repository
-
-```
-git clone https://github.com/your-username/InstruNet-AI.git
-cd InstruNet-AI
-```
-
-### 2. Install dependencies
-
-```
-pip install -r requirements.txt
-```
-
-### 3. Run the application
-
-```
-streamlit run app.py
-```
-
----
 
 ## Usage
 
