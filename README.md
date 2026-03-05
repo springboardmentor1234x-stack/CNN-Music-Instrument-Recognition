@@ -32,9 +32,9 @@ Saved as Image
 
 ## Current Progress
 
-✔ Dataset downloaded  
-✔ IRMAS folder structure verified  
-✔ Spectrogram generation completed  
+-> Dataset downloaded  
+-> IRMAS folder structure verified  
+-> Spectrogram generation completed  
 
 Next step:
 CNN training for instrument classification.
