@@ -1,0 +1,7 @@
+IRMAS-TrainingData/
+dataset/
+*.wav
+*.png
+*.mp3
+*.zip
+*.npy
