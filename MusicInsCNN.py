@@ -20,7 +20,7 @@ from tensorflow.keras import layers, models
 # 2. Dataset Location
 # ===============================
 
-DATA_DIR = "D:\MusicInstrumentCNN\IRMAS-TrainingData"
+DATA_DIR = r"D:\MusicInstrumentCNN\IRMAS-TrainingData"
 
 
 # ===============================
@@ -63,15 +63,21 @@ print("Classes:", class_names)
 
 def audio_augmentation(signal, sr):
 
+    # Pitch shift
     if np.random.rand() > 0.5:
-        signal = librosa.effects.pitch_shift(signal, sr=sr, n_steps=2)
+        signal = librosa.effects.pitch_shift(signal, sr=sr, n_steps=np.random.randint(-2,2))
 
+    # Add noise
     if np.random.rand() > 0.5:
-        noise = np.random.normal(0, 0.002, len(signal))
+        noise = np.random.normal(0,0.002,len(signal))
         signal = signal + noise
 
-    return signal
+    # Time stretch
+    if np.random.rand() > 0.5:
+        rate = np.random.uniform(0.8,1.2)
+        signal = librosa.effects.time_stretch(signal, rate=rate)
 
+    return signal
 
 # ===============================
 # 6. Feature Extraction
@@ -171,27 +177,32 @@ print("Train shape:", X_train.shape)
 
 model = models.Sequential([
 
-    layers.Conv2D(32,(3,3),activation="relu",input_shape=(128,128,1)),
+    layers.Input(shape=(128,128,1)),
+
+    layers.Conv2D(32,(3,3),activation="relu"),
     layers.BatchNormalization(),
-    layers.MaxPooling2D(2,2),
+    layers.MaxPooling2D((2,2)),
 
     layers.Conv2D(64,(3,3),activation="relu"),
     layers.BatchNormalization(),
-    layers.MaxPooling2D(2,2),
+    layers.MaxPooling2D((2,2)),
 
     layers.Conv2D(128,(3,3),activation="relu"),
-    layers.MaxPooling2D(2,2),
+    layers.BatchNormalization(),
+    layers.MaxPooling2D((2,2)),
 
-    layers.Flatten(),
+    layers.Conv2D(256,(3,3),activation="relu"),
+    layers.BatchNormalization(),
+    layers.MaxPooling2D((2,2)),
+
+    layers.GlobalAveragePooling2D(),
 
     layers.Dense(256,activation="relu"),
-    layers.Dropout(0.3),
+    layers.Dropout(0.4),
 
     layers.Dense(len(class_names),activation="softmax")
 
 ])
-
-model.summary()
 
 
 # ===============================
@@ -206,21 +217,38 @@ model.compile(
 
 )
 
+# ===============================
+# 11. Callbacks
+# ===============================     
+
+
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+
+early_stop = EarlyStopping(
+    monitor='val_loss',
+    patience=4,
+    restore_best_weights=True
+)
+
+lr_reduce = ReduceLROnPlateau(
+    monitor='val_loss',
+    factor=0.3,
+    patience=2,
+    min_lr=0.00001
+)
 
 # ===============================
-# 11. Train Model
+# 12. Train Model
 # ===============================
 
 history = model.fit(
-
     X_train,
     y_train,
-    epochs=15,
+    epochs=25,
     batch_size=32,
-    validation_data=(X_val,y_val)
-
+    validation_data=(X_val,y_val),
+    callbacks=[early_stop, lr_reduce]
 )
-
 
 # ===============================
 # 12. Model Evaluation
@@ -230,6 +258,9 @@ loss, accuracy = model.evaluate(X_test, y_test)
 
 print("Test Accuracy:", accuracy)
 
+model.save("instrument_classifier_model.h5")
+
+print("Model saved successfully")
 
 # ===============================
 # 13. Predictions
@@ -277,6 +308,34 @@ plt.ylabel("Actual")
 plt.title("Confusion Matrix")
 
 plt.show()
+
+
+# ===============================
+# Random prediction demo
+# ===============================
+
+
+sample = np.random.randint(0,len(X_test))
+
+prediction = model.predict(X_test[sample:sample+1])[0]
+
+predicted_class = np.argmax(prediction)
+
+print("\nActual Instrument:", class_names[y_test[sample]])
+print("Predicted Instrument:", class_names[predicted_class])
+
+# ===============================
+# Random prediction demo
+# ===============================
+
+sample = np.random.randint(0,len(X_test))
+
+prediction = model.predict(X_test[sample:sample+1])[0]
+
+predicted_class = np.argmax(prediction)
+
+print("\nActual Instrument:", class_names[y_test[sample]])
+print("Predicted Instrument:", class_names[predicted_class])
 
 # ===============================
 # Training Graphs
