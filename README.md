@@ -19,7 +19,6 @@ The project demonstrates a complete end-to-end machine learning pipeline, includ
 * JSON and PDF report generation
 * Interactive web interface using Streamlit
 
-
 ---
 
 ## System Workflow
@@ -61,21 +60,6 @@ The project demonstrates a complete end-to-end machine learning pipeline, includ
 * ReportLab (PDF generation)
 
 ---
-
-## Project Structure
-
-```
-InstruNet-AI/
-│
-├── app.py
-├── requirements.txt
-├── README.md
-└── model/
-    └── instrunet_cnn.keras (stored in Google Drive)
-```
-
----
-
 
 ## Usage
 
@@ -133,4 +117,4 @@ This project is for educational and demonstration purposes.
 
 
 
-link = 
+link = https://cnn-based-music-instrument-recognition-system-vignesh-221.streamlit.app/
