@@ -1,46 +1,57 @@
-# CNN-Music-Instrument-Recognition
 
+# InstruNet AI 🎵
 
+InstruNet AI is a deep learning project that detects musical instruments in an audio track using CNNs.
 
-## 📝 Description
+## Features
+- Audio preprocessing
+- Mel spectrogram generation
+- CNN-based instrument classification
+- Multi-instrument prediction
+- Visualization of detected instruments
+- JSON report generation
 
-CNN-Music-Instrument-Recognition is a deep learning project focused on the automated classification of musical instruments from audio signals. By leveraging Convolutional Neural Networks (CNNs), the system transforms audio data into visual representations such as Mel-spectrograms to effectively identify and categorize various instruments. This project encompasses the entire machine learning workflow, from audio preprocessing and feature extraction using libraries like Librosa to designing and training a high-performance CNN model. It serves as a robust foundation for anyone interested in the intersection of audio signal processing and computer vision applied to the field of music informatics.
+## Project Structure
+```
+data/
+  raw_audio/
+  spectrograms/
+models/
+outputs/
+src/
+  preprocess.py
+  spectrogram.py
+  train_model.py
+  predict.py
+  visualize.py
+requirements.txt
+run_pipeline.py
+```
 
-## 📁 Project Structure
+## Setup
+
+1. Install dependencies
 
 ```
-.
-├── MusicInsCNN.py
-├── dataset_info
-│   └── irmas_dataset_description.md
-├── preprocess.py
-└── test.py
+pip install -r requirements.txt
 ```
 
-## 👥 Contributinggit add README.md
+2. Add audio files to:
 
+```
+data/raw_audio/
+```
 
-Contributions are welcome! Here's how you can help:
+3. Train model
 
-1. **Fork** the repository
-2. **Clone** your fork: `git clone https://github.com/springboardmentor1234x-stack/CNN-Music-Instrument-Recognition.git`
-3. **Create** a new branch: `git checkout -b feature/your-feature`
-4. **Commit** your changes: `git commit -am 'Add some feature'`
-5. **Push** to your branch: `git push origin feature/your-feature`
-6. **Open** a pull request
+```
+python src/train_model.py
+```
 
-Please ensure your code follows the project's style guidelines and inc
+4. Run prediction
 
-Contributions are welcome! Here's how you can help:
+```
+python src/predict.py
+```
 
-1. **Fork** the repository
-2. **Clone** your fork: `git clone https://github.com/springboardmentor1234x-stack/CNN-Music-Instrument-Recognition.git`
-3. **Create** a new branch: `git checkout -b feature/your-feature`
-4. **Commit** your changes: `git commit -am 'Add some feature'`
-5. **Push** to your branch: `git push origin feature/your-feature`
-6. **Open** a pull request
-
-Please ensure your code follows the project's style guidelines and includes tests where applicable.
-
----
-
+Outputs will be saved in the `outputs/` folder.
