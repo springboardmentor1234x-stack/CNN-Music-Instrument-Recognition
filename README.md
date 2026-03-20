@@ -114,6 +114,7 @@ outputs/
 * Adam optimizer achieved the best validation performance
 * Segment-based prediction improved stability
 * Smoothing reduced noise in predictions
+* Dataset: IRMAS (Instrument Recognition in Musical Audio Signals) dataset is used for instrument classification. Currently, a synthetic dataset is used for demonstration purposes.
 Note: Currently the model is trained on synthetic (dummy) data. Performance can be significantly improved using real-world labeled datasets.
 ---
 
