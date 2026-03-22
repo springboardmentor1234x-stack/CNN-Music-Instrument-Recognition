@@ -1,8 +1,8 @@
-# CNN Music Instrument Recognition
+//** CNN Music Instrument Recognition**
 
 This project detects musical instruments using CNN and audio signal processing.
 
-## Dataset
+// Dataset
 IRMAS (Instrument Recognition in Musical Audio Signals)
 
 Instrument classes:
@@ -18,7 +18,7 @@ Instrument classes:
 - vio (violin)
 - voi (voice)
 
-## Preprocessing Workflow
+// Preprocessing Workflow
 
 Audio (.wav)
 ↓
@@ -30,13 +30,13 @@ Log Scaling
 ↓
 Saved as Image
 
-## Current Progress
+// Current Progress
 
 -> Dataset downloaded  
 -> IRMAS folder structure verified  
 -> Spectrogram generation completed  
 
-## Dataset Preparation
+// Dataset Preparation
 
 After generating Mel spectrogram images, the dataset is split into:
 
@@ -45,3 +45,14 @@ After generating Mel spectrogram images, the dataset is split into:
 - Test (15%)
 
 The script `split_dataset.py` automatically organizes the dataset into the required structure for CNN training.
+
+
+//Project Workflow
+
+1. IRMAS dataset download
+2. Audio preprocessing
+3. Mel spectrogram generation
+4. Dataset split (Train / Validation / Test)
+5. CNN training
+6. Model evaluation
+7. Instrument prediction
