@@ -8,6 +8,7 @@ The system converts raw audio signals into spectrogram representations and train
 
 
 **2. Key Features**
+
   * Audio preprocessing and feature extraction (Mel Spectrograms)
   * Custom CNN architecture for classification
   * Training, validation, and evaluation pipeline
@@ -88,32 +89,37 @@ The system converts raw audio signals into spectrogram representations and train
      
 
 **6. Web Application**
-      * Upload audio file (.wav / .mp3)
-      * Model predicts instrument class
-      * Displays prediction confidence
-      * Adjustable detection threshold
-      * Clean dashboard UI with model status
+
+   * Upload audio file (.wav / .mp3)
+   * Model predicts instrument class
+   * Displays prediction confidence
+   * Adjustable detection threshold
+   * Clean dashboard UI with model status
   
   
 **7. Key Learnings**
-      * Feature engineering is critical for audio data
-      * Spectrogram representation significantly improves model performance
-      * Data quality impacts accuracy more than model complexity
-      * Proper loss function and activation selection are essential
+
+   * Feature engineering is critical for audio data
+   * Spectrogram representation significantly improves model performance
+   * Data quality impacts accuracy more than model complexity
+   * Proper loss function and activation selection are essential
 
 
 **8. Future Improvements**
-      * Use advanced models (YAMNet, Transformers)
-      * Improve dataset balancing and augmentation
-      * Add top-k predictions with confidence scores
-      * Deploy on cloud platforms (Streamlit Cloud / Hugging Face)
-      * Enable real-time audio stream prediction
+
+   * Use advanced models (YAMNet, Transformers)
+   * Improve dataset balancing and augmentation
+   * Add top-k predictions with confidence scores
+   * Deploy on cloud platforms (Streamlit Cloud / Hugging Face)
+   * Enable real-time audio stream prediction
 
 **9. Author**
+
 S. AISWARYA
 Deep Learning Project – Audio Classification
 
 **10. License**
+
 This project was developed as part of the Infosys Springboard Virtual Internship 6.0.
 
 It is intended for educational and non-commercial use only.
