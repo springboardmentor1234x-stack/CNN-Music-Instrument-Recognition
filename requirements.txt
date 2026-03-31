@@ -1,8 +1,7 @@
-
-librosa
+streamlit
 numpy
-pandas
+librosa
 matplotlib
-scikit-learn
 tensorflow
-soundfile
+scikit-learn
+reportlab

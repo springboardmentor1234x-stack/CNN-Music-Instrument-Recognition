@@ -1,4 +1,3 @@
-
 import librosa
 import numpy as np
 
@@ -7,8 +6,8 @@ def load_audio(path, sr=22050):
     return audio, sr
 
 def normalize_audio(audio):
-    return audio / np.max(np.abs(audio))
+    return audio / (np.max(np.abs(audio)) + 1e-6)
 
 def trim_silence(audio):
-    trimmed, _ = librosa.effects.trim(audio)
-    return trimmed
+    audio, _ = librosa.effects.trim(audio)
+    return audio

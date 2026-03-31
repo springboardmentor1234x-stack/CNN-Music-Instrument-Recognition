@@ -20,20 +20,20 @@ InstruNet AI is a deep learning-based system designed to automatically detect mu
 ## 📁 Project Structure
 
 ```
-data/
-  raw_audio/
-  spectrograms/
-models/
-outputs/
-src/
-  preprocess.py
-  spectrogram.py
-  train_model.py
-  predict.py
-  visualize.py
-  evaluation.py
-requirements.txt
-run_pipeline.py
+InstruNet/
+├── app.py
+├── requirements.txt
+├── data/
+│ └── sample.wav
+├── outputs/
+│ ├── result.json
+│ └── report.pdf
+└── src/
+├── preprocess.py
+├── spectrogram.py
+├── pipeline.py
+├── predict.py
+└── report.py
 ```
 
 ---
@@ -74,27 +74,34 @@ This will:
 
 ## 🔮 Prediction Pipeline
 
-Run the full pipeline:
+Run the Streamlit app:
 
-```
-python run_pipeline.py
-```
+
+streamlit run app.py
+
 
 This performs:
 
-* Audio preprocessing
-* Segmentation of audio
-* Spectrogram generation
-* Instrument prediction
-* Averaging and smoothing
+- Audio preprocessing  
+- Segmentation of audio  
+- Spectrogram generation  
+- Instrument prediction  
+- Averaging and smoothing  
 
-Outputs will be saved in:
+Outputs are saved in:
 
-```
+
 outputs/
-```
 
 ---
+## 🖥️ Streamlit Dashboard
+
+- Upload audio files (.wav)
+- View audio playback
+- Run full prediction pipeline
+- View detected instruments
+- Generate JSON output
+- Generate PDF report
 
 ## 📊 Advanced Features
 
@@ -106,6 +113,8 @@ outputs/
 * Averaging and smoothing of predictions
 * Confusion matrix generation
 * Classification metrics (precision, recall, F1-score)
+* Streamlit-based interactive dashboard
+* PDF report generation
 
 ---
 
@@ -114,7 +123,6 @@ outputs/
 * Adam optimizer achieved the best validation performance
 * Segment-based prediction improved stability
 * Smoothing reduced noise in predictions
-* Dataset: IRMAS (Instrument Recognition in Musical Audio Signals) dataset is used for instrument classification. Currently, a synthetic dataset is used for demonstration purposes.
 Note: Currently the model is trained on synthetic (dummy) data. Performance can be significantly improved using real-world labeled datasets.
 ---
 
