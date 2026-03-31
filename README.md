@@ -33,7 +33,7 @@ The system converts raw audio signals into spectrogram representations and train
 
 
 **4. Tech stack**
-    *  Programming Language: Python
+  *  Programming Language: Python
   * Libraries:
       * TensorFlow / Keras
       * Librosa (audio processing)
