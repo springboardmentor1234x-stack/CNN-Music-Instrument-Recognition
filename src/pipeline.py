@@ -4,6 +4,7 @@ from src.spectrogram import generate_mel_spectrogram
 from src.predict import aggregate, apply_threshold
 
 
+# ✅ Fix spectrogram size to 128x128
 def fix_spectrogram(spec, target_size=(128, 128)):
     h, w = spec.shape
 
@@ -40,6 +41,7 @@ def run_pipeline(path):
         # Generate spectrogram
         spec = generate_mel_spectrogram(seg, sr)
 
+        # ✅ Fix size
         spec = fix_spectrogram(spec)
 
         # Reshape for model
