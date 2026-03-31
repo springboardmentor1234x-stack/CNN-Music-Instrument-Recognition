@@ -19,7 +19,9 @@ The system converts raw audio signals into spectrogram representations and train
 
 **3. Dataset**
    Dataset Used: IRMAS (Instrument Recognition in Musical Audio Signals)
+   
    Classes (11 Instruments):
+   
       * Cello (cel)
       * Clarinet (cla)
       * Flute (flu)
