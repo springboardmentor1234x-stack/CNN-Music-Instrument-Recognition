@@ -1,0 +1,21 @@
+{
+  "file": "002__[pia][nod][cla]1382__2.wav",
+  "detected_instruments": [
+    "pia"
+  ],
+  "confidence_scores": {
+    "cel": 0.0,
+    "cla": 0.0,
+    "flu": 0.0,
+    "gac": 0.0023,
+    "gel": 0.0004,
+    "org": 0.0,
+    "pia": 0.9993,
+    "sax": 0.0,
+    "tru": 0.0,
+    "vio": 0.0,
+    "voi": 0.0
+  },
+  "threshold_used": 0.5,
+  "exported_at": "2026-03-31T00:38:27.571785"
+}
