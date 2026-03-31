@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstruNet AI - Music Instrument Recognition</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+    <div class="bg-blur blur1"></div>
+    <div class="bg-blur blur2"></div>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header class="hero">
+            <div class="hero-text">
+                <h1>🎵 InstruNet AI</h1>
+                <p class="subtitle">CNN-Based Music Instrument Recognition System</p>
+                <p class="desc">
+                    Upload an audio file and let the AI identify musical instruments
+                    using waveform analysis, mel-spectrograms, and deep learning.
+                </p>
+            </div>
+        </header>
+
+        {% if error %}
+        <div class="error-box glass">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- =========================
+             STEP 1 - UPLOAD
+        ========================== -->
+        <div id="slide1" class="slide-section">
+            <section class="upload-card glass">
+                <h2>📂 Upload Audio</h2>
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="upload-box">
+                        <input type="file" name="audio_file" id="audio_file" accept=".wav,.mp3,.flac" required>
+                        <label for="audio_file" id="fileLabel">Choose Audio File</label>
+                        <p id="fileNameDisplay" style="margin-top:10px; color:#93c5fd; font-weight:600;"></p>
+                    </div>
+
+                    <!-- Audio Preview Before Submit -->
+                    <div id="previewContainer" style="display:none; margin-bottom:20px;">
+                        <p style="margin-bottom:10px; color:#cbd5e1; font-weight:600;">🎧 Preview Before Analysis</p>
+                        <audio id="audioPreview" controls style="width:100%;"></audio>
+                    </div>
+
+                    <button type="submit" class="analyze-btn">🚀 Analyze Audio</button>
+                </form>
+            </section>
+        </div>
+
+        {% if result %}
+
+        <!-- =========================
+             STEP 2 - ANALYSIS
+        ========================== -->
+        <div id="slide2" class="slide-section">
+            <section class="glass info-card">
+                <h2>🎧 Uploaded Audio</h2>
+                <div class="meta-grid">
+                    <div class="meta-item">
+                        <span>📁 File</span>
+                        <strong>{{ result.filename }}</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>⏱ Duration</span>
+                        <strong>{{ result.duration }} sec</strong>
+                    </div>
+                    <div class="meta-item">
+                        <span>🎚 Sample Rate</span>
+                        <strong>{{ result.sample_rate }} Hz</strong>
+                    </div>
+                </div>
+
+                <div class="audio-player">
+                    <audio controls>
+                        <source src="{{ result.audio_url }}">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+            </section>
+
+            <section class="visual-section">
+                <h2 class="section-title">📊 Audio Analysis Dashboard</h2>
+                <div class="visual-grid">
+                    <div class="visual-card glass">
+                        <h3>📈 Waveform</h3>
+                        <img src="{{ result.waveform_url }}" alt="Waveform">
+                    </div>
+                    <div class="visual-card glass">
+                        <h3>🌈 Mel Spectrogram</h3>
+                        <img src="{{ result.spectrogram_url }}" alt="Spectrogram">
+                    </div>
+                </div>
+            </section>
+
+            {% if result.timeline_url %}
+            <section class="glass timeline-card">
+                <h2>⏱ Instrument Activity Timeline</h2>
+                <p class="small-text">Confidence of detected instruments across time segments</p>
+                <img src="{{ result.timeline_url }}" alt="Timeline">
+            </section>
+            {% endif %}
+        </div>
+
+        <!-- =========================
+             STEP 3 - RESULTS
+        ========================== -->
+        <div id="slide3" class="slide-section">
+
+            {% if result.predictions and result.predictions|length > 0 %}
+            <section class="glass top-prediction">
+                <h2>🏆 Top Prediction</h2>
+                <div class="top-card">
+                    <h1>{{ result.predictions[0].name }}</h1>
+                    <p>{{ result.predictions[0].confidence }}% Confidence</p>
+                </div>
+            </section>
+
+            <section class="top3-section">
+                <h2 class="section-title">🥇 Top 3 Predictions</h2>
+                <div class="prediction-grid">
+                    {% for item in result.top_3_predictions %}
+                    <div class="prediction-card glass present">
+                        <div class="card-head">
+                            <h3>{{ item.name }}</h3>
+                            <span class="badge badge-green">Top Pick</span>
+                        </div>
+                        <p class="confidence-text">Confidence: <strong>{{ item.confidence }}%</strong></p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ item.confidence }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            <section class="prediction-section">
+                <h2 class="section-title">✅ Present Instruments</h2>
+                <div class="prediction-grid">
+                    {% for item in result.present_instruments %}
+                    <div class="prediction-card glass present">
+                        <div class="card-head">
+                            <h3>{{ item.name }}</h3>
+                            <span class="badge badge-green">Present</span>
+                        </div>
+                        <p class="confidence-text">Confidence: <strong>{{ item.confidence }}%</strong></p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ item.confidence }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="prediction-section">
+                <h2 class="section-title">❌ Not Present Instruments</h2>
+                <div class="prediction-grid">
+                    {% for item in result.absent_instruments %}
+                    <div class="prediction-card glass not-present">
+                        <div class="card-head">
+                            <h3>{{ item.name }}</h3>
+                            <span class="badge badge-red">Not Present</span>
+                        </div>
+                        <p class="confidence-text">Confidence: <strong>{{ item.confidence }}%</strong></p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ item.confidence }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+
+        <!-- STEP CONTROLS -->
+        <div class="slide-controls">
+            <button onclick="prevSlide()" class="nav-btn">⬅ Previous</button>
+            <button onclick="nextSlide()" class="nav-btn">Next ➡</button>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const maxSlide = {{ 3 if result else 1 }};
+
+        function showSlide(slideNumber) {
+            if (slideNumber < 1 || slideNumber > maxSlide) return;
+
+            document.querySelectorAll(".slide-section").forEach(section => {
+                section.style.display = "none";
+            });
+
+            const activeSlide = document.getElementById("slide" + slideNumber);
+            if (activeSlide) {
+                activeSlide.style.display = "block";
+            }
+
+            currentSlide = slideNumber;
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        function nextSlide() {
+            if (currentSlide < maxSlide) {
+                showSlide(currentSlide + 1);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                showSlide(currentSlide - 1);
+            }
+        }
+
+        // File preview before analyze
+        const fileInput = document.getElementById("audio_file");
+        const fileNameDisplay = document.getElementById("fileNameDisplay");
+        const audioPreview = document.getElementById("audioPreview");
+        const previewContainer = document.getElementById("previewContainer");
+
+        if (fileInput) {
+            fileInput.addEventListener("change", function () {
+                if (fileInput.files.length > 0) {
+                    const file = fileInput.files[0];
+                    fileNameDisplay.textContent = "Selected: " + file.name;
+                    const fileURL = URL.createObjectURL(file);
+                    audioPreview.src = fileURL;
+                    previewContainer.style.display = "block";
+                }
+            });
+        }
+
+        // Initial screen logic
+        window.onload = function () {
+            {% if result %}
+                showSlide(2);   // after upload -> directly go to analysis
+            {% else %}
+                showSlide(1);   // first open -> upload only
+            {% endif %}
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,19 @@
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Large ML files
+*.pth
+*.h5
+*.npy
+
+# Generated / uploads
+*.mp3
+*.wav
+*.png
+static/uploads/
+static/plots/
+cache/
+models/X_test.npy
+models/instrunet_cnn.h5

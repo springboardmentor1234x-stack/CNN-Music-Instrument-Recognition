@@ -1,0 +1,46 @@
+{
+  "cel": {
+    "label": "Cello",
+    "count": 1164
+  },
+  "cla": {
+    "label": "Clarinet",
+    "count": 1515
+  },
+  "flu": {
+    "label": "Flute",
+    "count": 1353
+  },
+  "gac": {
+    "label": "Acoustic Guitar",
+    "count": 1911
+  },
+  "gel": {
+    "label": "Electric Guitar",
+    "count": 2280
+  },
+  "org": {
+    "label": "Organ",
+    "count": 2046
+  },
+  "pia": {
+    "label": "Piano",
+    "count": 2163
+  },
+  "sax": {
+    "label": "Saxophone",
+    "count": 1878
+  },
+  "tru": {
+    "label": "Trumpet",
+    "count": 1731
+  },
+  "vio": {
+    "label": "Violin",
+    "count": 1740
+  },
+  "voi": {
+    "label": "Voice",
+    "count": 2334
+  }
+}
