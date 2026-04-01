@@ -45,9 +45,9 @@ MODEL_PATH = '/content/drive/MyDrive/IRMAS/models/best_model.h5'
 # ─────────────────────────────────────────────────────────────
 
 USERS = {
-    "aiswarya" : "irmas2024",
-    "admin"    : "admin123",
-    "demo"     : "demo123"
+    "aiswarya": "irmas2024",
+    "admin": "admin123",
+    "demo": "demo123"
 }
 
 
