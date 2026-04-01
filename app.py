@@ -10,6 +10,10 @@ matplotlib.use("Agg")
 from fpdf import FPDF
 
 
+# ─────────────────────────────────────────────────────────────
+# CONSTANTS
+# ─────────────────────────────────────────────────────────────
+
 SR         = 22050
 DURATION   = 3.0
 N_FFT      = 2048
@@ -36,6 +40,20 @@ INSTRUMENT_EMOJI = {
 
 MODEL_PATH = '/content/drive/MyDrive/IRMAS/models/best_model.h5'
 
+# ─────────────────────────────────────────────────────────────
+# USER CREDENTIALS  (add more users here as needed)
+# ─────────────────────────────────────────────────────────────
+
+USERS = {
+    "aiswarya" : "irmas2024",
+    "admin"    : "admin123",
+    "demo"     : "demo123"
+}
+
+
+# ─────────────────────────────────────────────────────────────
+# PAGE CONFIG  (must be first Streamlit call)
+# ─────────────────────────────────────────────────────────────
 
 st.set_page_config(
     page_title="🎵 IRMAS Instrument Recognizer",
@@ -44,6 +62,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
+# ─────────────────────────────────────────────────────────────
+# GLOBAL CSS  (covers both login page and main app)
+# ─────────────────────────────────────────────────────────────
 
 st.markdown("""
 <style>
@@ -55,7 +77,50 @@ html, body, [class*="css"] {
     color: #f0f0f0;
 }
 
-/* Header */
+/* ── LOGIN PAGE ── */
+.login-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+}
+.login-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+    border: 1px solid #e94560;
+    border-radius: 18px;
+    padding: 44px 48px 36px;
+    max-width: 420px;
+    width: 100%;
+    box-shadow: 0 8px 40px rgba(233,69,96,0.18);
+}
+.login-logo {
+    text-align: center;
+    font-size: 3rem;
+    margin-bottom: 4px;
+}
+.login-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem;
+    color: #e94560;
+    text-align: center;
+    letter-spacing: 4px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+.login-sub {
+    color: #888;
+    text-align: center;
+    font-size: 0.82rem;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+}
+.login-divider {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 0 0 22px 0;
+}
+
+/* ── MAIN APP ── */
 .main-header {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     border-radius: 16px;
@@ -117,7 +182,7 @@ html, body, [class*="css"] {
     margin: 4px;
 }
 
-/* Confidence bar container */
+/* Confidence bars */
 .conf-row {
     display: flex;
     align-items: center;
@@ -193,13 +258,10 @@ section[data-testid="stSidebar"] {
     border-right: 1px solid #2a2a2a;
 }
 
-/* Success / Warning */
+/* Misc */
 .stAlert { border-radius: 10px !important; }
-
-/* Spinner */
 .stSpinner { color: #e94560; }
 
-/* Metric */
 .metric-box {
     background: #1a1a1a;
     border: 1px solid #2a2a2a;
@@ -219,10 +281,81 @@ section[data-testid="stSidebar"] {
     text-transform: uppercase;
     letter-spacing: 1px;
 }
+
+/* Logout button in sidebar */
+.logout-btn > button {
+    background: transparent !important;
+    border: 1px solid #e94560 !important;
+    color: #e94560 !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    width: 100% !important;
+    margin-top: 6px;
+}
+.logout-btn > button:hover {
+    background: #e94560 !important;
+    color: white !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
 
+# ─────────────────────────────────────────────────────────────
+# SESSION STATE INIT
+# ─────────────────────────────────────────────────────────────
+
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
+if "username" not in st.session_state:
+    st.session_state["username"] = ""
+
+
+# ─────────────────────────────────────────────────────────────
+# LOGIN PAGE
+# ─────────────────────────────────────────────────────────────
+
+def show_login_page():
+    _, center_col, _ = st.columns([1, 1.6, 1])
+    with center_col:
+        st.markdown('<div class="login-logo">🎵</div>', unsafe_allow_html=True)
+        st.markdown('<div class="login-title">IRMAS</div>', unsafe_allow_html=True)
+        st.markdown('<div class="login-sub">INSTRUMENT RECOGNITION SYSTEM</div>', unsafe_allow_html=True)
+        st.markdown('<hr class="login-divider">', unsafe_allow_html=True)
+
+        username = st.text_input("👤 Username", placeholder="Enter your username", key="login_user")
+        password = st.text_input("🔒 Password", type="password", placeholder="Enter your password", key="login_pass")
+
+        st.markdown("<br>", unsafe_allow_html=True)
+
+        if st.button("LOGIN  →", use_container_width=True, key="login_btn"):
+            if username in USERS and USERS[username] == password:
+                st.session_state["logged_in"] = True
+                st.session_state["username"]  = username
+                st.success(f"✅ Welcome, {username}!  Redirecting...")
+                st.rerun()
+            else:
+                st.error("❌ Invalid username or password. Please try again.")
+
+        st.markdown("""
+        <p style='color:#444; text-align:center; font-size:0.76rem; margin-top:18px;'>
+            Demo &nbsp;|&nbsp; username: <b style='color:#888'>demo</b>
+            &nbsp;&nbsp; password: <b style='color:#888'>demo123</b>
+        </p>
+        """, unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────────────────────────
+# GATE: show login if not authenticated
+# ─────────────────────────────────────────────────────────────
+
+if not st.session_state["logged_in"]:
+    show_login_page()
+    st.stop()   # ← nothing below runs until user logs in
+
+
+# ─────────────────────────────────────────────────────────────
+# HELPER FUNCTIONS
+# ─────────────────────────────────────────────────────────────
 
 def load_and_preprocess(path):
     y, sr = librosa.load(path, sr=None, mono=False)
@@ -268,10 +401,9 @@ def predict(filepath):
     segs   = segment_audio(y)
     specs  = np.array([to_mel(s) for s in segs])[..., np.newaxis]
     probs  = model.predict(specs, verbose=0)
-    return np.mean(probs, axis=0)   # aggregate across segments
+    return np.mean(probs, axis=0)
 
 def build_conf_bars(agg, threshold):
-    """Build HTML confidence bars sorted by score."""
     sorted_idx = np.argsort(agg)[::-1]
     html = ""
     for i in sorted_idx:
@@ -349,16 +481,20 @@ def export_pdf(filename, detected, agg):
         {INSTRUMENTS[i]: float(agg[i]) for i in range(11)}.items(),
         key=lambda x: -x[1]
     ):
-        bar = '|' * int(score * 30)
+        bar    = '|' * int(score * 30)
         marker = '<<' if score >= THRESHOLD else '  '
         pdf.cell(0, 7, f"  {INSTRUMENT_NAMES[inst]:20s}  {score:.3f}  {bar} {marker}", ln=True)
 
     import io
     buf = io.BytesIO()
-    pdf_bytes = pdf.output(dest='S').encode('latin-1')
-    buf.write(pdf_bytes)
+    buf.write(pdf.output(dest='S'))
     buf.seek(0)
     return buf.read()
+
+
+# ─────────────────────────────────────────────────────────────
+# SIDEBAR  (shown only when logged in)
+# ─────────────────────────────────────────────────────────────
 
 with st.sidebar:
     st.markdown("""
@@ -369,6 +505,26 @@ with st.sidebar:
     </div>
     <hr style='border-color:#2a2a2a; margin:12px 0;'>
     """, unsafe_allow_html=True)
+
+    # ── Logged-in user info ──
+    st.markdown(
+        f"<div style='background:#1a1a1a; border:1px solid #2a2a2a; border-radius:8px;"
+        f"padding:10px 14px; margin-bottom:12px;'>"
+        f"<span style='color:#888; font-size:0.78rem;'>LOGGED IN AS</span><br>"
+        f"<span style='color:#e94560; font-family:Space Mono; font-weight:700;'>"
+        f"👤 {st.session_state['username'].upper()}</span></div>",
+        unsafe_allow_html=True
+    )
+
+    # ── Logout button ──
+    st.markdown('<div class="logout-btn">', unsafe_allow_html=True)
+    if st.button("🚪 Logout", use_container_width=True, key="logout_btn"):
+        st.session_state["logged_in"] = False
+        st.session_state["username"]  = ""
+        st.rerun()
+    st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown("<hr style='border-color:#2a2a2a; margin:14px 0;'>", unsafe_allow_html=True)
 
     st.markdown("**⚙️ Settings**")
     threshold = st.slider("Detection Threshold", 0.1, 0.9, THRESHOLD, 0.05,
@@ -390,6 +546,11 @@ with st.sidebar:
     → CNN → Predict
     </div>
     """, unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────────────────────────
+# MAIN APP
+# ─────────────────────────────────────────────────────────────
 
 st.markdown("""
 <div class="main-header">
@@ -453,7 +614,6 @@ y, sr = load_and_preprocess(tmp_path)
 duration_sec = len(y) / sr
 segs = segment_audio(y)
 
-# Metrics row
 m1, m2, m3, m4 = st.columns(4)
 with m1:
     st.markdown(f'<div class="metric-box"><div class="metric-val">{duration_sec:.1f}s</div><div class="metric-lbl">Duration</div></div>', unsafe_allow_html=True)
@@ -486,8 +646,8 @@ with col_wave:
 
 with col_mel:
     st.markdown('<div class="card"><div class="card-title">🌈 Mel Spectrogram (Frequency Domain)</div>', unsafe_allow_html=True)
-    mel = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT,
-            hop_length=HOP_LENGTH, n_mels=N_MELS, fmin=FMIN, fmax=FMAX)
+    mel     = librosa.feature.melspectrogram(y=y, sr=sr, n_fft=N_FFT,
+                hop_length=HOP_LENGTH, n_mels=N_MELS, fmin=FMIN, fmax=FMAX)
     log_mel = librosa.power_to_db(mel, ref=np.max)
     fig, ax = plt.subplots(figsize=(7, 2.5))
     fig.patch.set_facecolor('#161616')
@@ -521,14 +681,12 @@ if st.button("🎯 Detect Instruments", use_container_width=True):
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── Result banner ──
     if detected:
         names_str = "  ·  ".join([f"{INSTRUMENT_EMOJI[d]} {INSTRUMENT_NAMES[d]}" for d in detected])
         st.success(f"**Detected:** {names_str}")
     else:
         st.warning("No instrument confidently detected above the threshold. Try lowering the threshold in the sidebar.")
 
-    # ── Instrument badges ──
     st.markdown('<div class="card"><div class="card-title">🎼 Detection Result</div>', unsafe_allow_html=True)
     badge_html = ""
     for inst in INSTRUMENTS:
@@ -539,23 +697,20 @@ if st.button("🎯 Detect Instruments", use_container_width=True):
     st.markdown(badge_html, unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ── Confidence bars ──
     st.markdown('<div class="card"><div class="card-title">📊 Confidence Scores</div>', unsafe_allow_html=True)
     st.markdown(build_conf_bars(agg, THRESHOLD), unsafe_allow_html=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ── Summary stats ──
     st.markdown('<div class="card"><div class="card-title">📋 Summary</div>', unsafe_allow_html=True)
     c1, c2, c3, c4 = st.columns(4)
     top_inst  = INSTRUMENTS[int(np.argmax(agg))]
     top_score = float(np.max(agg))
-    c1.metric("Detected",    str(len(detected)))
+    c1.metric("Detected",       str(len(detected)))
     c2.metric("Top Instrument", INSTRUMENT_NAMES[top_inst])
-    c3.metric("Top Score",   f"{top_score:.3f}")
-    c4.metric("Threshold",   f"{THRESHOLD:.2f}")
+    c3.metric("Top Score",      f"{top_score:.3f}")
+    c4.metric("Threshold",      f"{THRESHOLD:.2f}")
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # ── STEP 4 — EXPORT ──
     st.markdown('<span class="step-label">4</span> **Export Results**', unsafe_allow_html=True)
     exp1, exp2 = st.columns(2)
 
@@ -579,7 +734,6 @@ if st.button("🎯 Detect Instruments", use_container_width=True):
             use_container_width=True
         )
 
-    # ── JSON preview ──
     with st.expander("👁️ Preview JSON Output"):
         st.code(json_str, language="json")
 
