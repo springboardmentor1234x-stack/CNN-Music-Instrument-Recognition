@@ -487,7 +487,7 @@ def export_pdf(filename, detected, agg):
 
     import io
     buf = io.BytesIO()
-    buf.write(pdf.output(dest='S'))
+    buf.write(pdf.output(dest='S').encode('latin-1'))
     buf.seek(0)
     return buf.read()
 
