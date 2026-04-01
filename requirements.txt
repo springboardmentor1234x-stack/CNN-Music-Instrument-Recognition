@@ -1,0 +1,28 @@
+# InstruNet AI - Requirements
+# Install with: pip install -r requirements.txt
+
+# Audio Processing
+librosa==0.10.2
+soundfile==0.12.1
+pydub==0.25.1
+
+# Deep Learning
+tensorflow==2.15.0
+# OR: torch torchvision torchaudio  (if using PyTorch)
+
+# Data & Visualization
+numpy==1.26.4
+matplotlib==3.8.3
+seaborn==0.13.2
+scikit-learn==1.4.1
+Pillow==10.2.0
+
+# Web App
+streamlit==1.32.2
+
+# Export
+fpdf2==2.7.9
+
+# Utilities
+tqdm==4.66.2
+pandas==2.2.1

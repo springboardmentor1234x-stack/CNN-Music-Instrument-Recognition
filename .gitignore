@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# VS Code
+.vscode/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large ML / dataset files
+data/
+datasets/
+spectrograms/
+*.png
+*.jpg
+*.jpeg
+*.wav
+*.mp3
+*.npy
+*.npz
+*.pkl
+*.joblib
+*.h5
+*.pt
+*.pth
