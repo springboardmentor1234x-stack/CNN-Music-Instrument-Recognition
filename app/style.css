@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700&display=swap');
+
+/* Global Styles */
+.main {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    font-family: 'Inter', sans-serif;
+}
+
+/* Glassmorphism Containers */
+.stApp {
+    background-color: transparent !important;
+}
+
+.css-1r6slb0, .css-k7vmod {
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 15px !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 20px !important;
+    margin-bottom: 20px !important;
+}
+
+/* Typography */
+h1, h2, h3 {
+    font-family: 'Outfit', sans-serif !important;
+    color: #f8fafc !important;
+    letter-spacing: -0.02em !important;
+}
+
+h1 { font-weight: 700 !important; }
+
+/* Custom Hero Section */
+.hero-container {
+    background: linear-gradient(90deg, #6366f1 0%, #a855f7 100%);
+    padding: 40px;
+    border-radius: 20px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+    text-align: center;
+}
+
+.hero-title {
+    font-size: 3rem !important;
+    font-weight: 700 !important;
+    color: white !important;
+    margin-bottom: 10px !important;
+}
+
+.hero-subtitle {
+    font-size: 1.2rem !important;
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 400 !important;
+}
+
+/* Tab Styling */
+.stTabs [data-baseweb="tab-list"] {
+    gap: 10px;
+    background-color: rgba(255, 255, 255, 0.03);
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.stTabs [data-baseweb="tab"] {
+    height: 50px;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 8px;
+    color: #94a3b8;
+    border: none;
+    font-weight: 600;
+}
+
+.stTabs [aria-selected="true"] {
+    background-color: rgba(99, 102, 241, 0.2) !important;
+    color: #6366f1 !important;
+}
+
+/* Cards for Detection Results */
+.result-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
+}
+
+.result-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: #6366f1;
+    transform: translateY(-2px);
+}
+
+/* File Uploader styling */
+.stFileUploader {
+    background: rgba(255, 255, 255, 0.02) !important;
+    border: 2px dashed rgba(99, 102, 241, 0.3) !important;
+    border-radius: 15px !important;
+}
+
+/* Progress Bar Customization */
+.stProgress > div > div > div > div {
+    background-color: #6366f1 !important;
+}
+
+/* Animation for cards */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
