@@ -5,7 +5,7 @@ __pycache__/
 
 # Large ML files
 *.pth
-*.h5
+# *.h5
 *.npy
 
 # Generated / uploads
