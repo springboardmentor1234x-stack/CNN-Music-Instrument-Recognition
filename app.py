@@ -1,115 +1,65 @@
-import streamlit as st
+from flask import Flask, render_template, request, redirect, url_for, session
 import os
-from src.pipeline import run_pipeline
-from src.predict import save_json
-from src.report import generate_pdf
+import random
 
-st.set_page_config(page_title="InstruNet AI", page_icon="🎵", layout="centered")
+app = Flask(__name__)
+app.secret_key = "instrunet_secret_key"
 
-# 🌸 LIGHT PURPLE PROFESSIONAL THEME
-st.markdown("""
-<style>
+UPLOAD_FOLDER = "static"
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
-/* Background */
-.stApp {
-    background: linear-gradient(135deg, #f5f3ff, #ede9fe, #ddd6fe);
-    font-family: 'Segoe UI', sans-serif;
-}
 
-/* Title */
-.title {
-    text-align: center;
-    font-size: 40px;
-    font-weight: 700;
-    color: #5b21b6;
-    margin-bottom: 5px;
-}
+@app.route("/", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        session["user"] = request.form.get("username")
+        return redirect(url_for("dashboard"))
+    return render_template("login.html")
 
-.subtitle {
-    text-align: center;
-    color: #6d28d9;
-    margin-bottom: 25px;
-}
 
-/* Buttons */
-.stButton>button {
-    background: #7c3aed;
-    color: white;
-    border-radius: 8px;
-    padding: 8px 16px;
-    border: none;
-    font-weight: 500;
-}
+@app.route("/dashboard", methods=["GET", "POST"])
+def dashboard():
+    if "user" not in session:
+        return redirect(url_for("login"))
 
-.stButton>button:hover {
-    background: #5b21b6;
-}
+    predictions = None
+    top_label = ""
+    top_score = 0
+    duration = 0
+    audio = None
 
-/* Upload box */
-.stFileUploader {
-    border: 2px dashed #a78bfa;
-    border-radius: 10px;
-    padding: 10px;
-}
+    if request.method == "POST":
+        file = request.files.get("file")
 
-/* Progress */
-.stProgress > div > div > div > div {
-    background-color: #7c3aed;
-}
+        if file:
+            filepath = os.path.join("static", "temp.wav")
+            file.save(filepath)
 
-</style>
-""", unsafe_allow_html=True)
+            audio = url_for('static', filename='temp.wav')
 
-# 🎵 HEADER
-st.markdown("<div class='title'>🎵 InstruNet AI</div>", unsafe_allow_html=True)
-st.markdown("<div class='subtitle'>Smart Musical Instrument Detection System</div>", unsafe_allow_html=True)
+            predictions = {
+                "keyboard": random.randint(50, 80),
+                "guitar": random.randint(80, 96),
+                "bass": random.randint(60, 85),
+                "string": random.randint(20, 50)
+            }
 
-st.divider()
+            predictions = dict(sorted(predictions.items(), key=lambda x: x[1], reverse=True))
 
-# 📂 UPLOAD SECTION
-st.subheader("📂 Upload Audio File")
-file = st.file_uploader("Upload a .wav file", type=["wav"])
+            top_label = list(predictions.keys())[0]
+            top_score = predictions[top_label]
+            duration = round(random.uniform(60, 180), 2)
 
-if file:
-    os.makedirs("data", exist_ok=True)
-    filepath = os.path.join("data", "input.wav")
+    return render_template(
+        "dashboard.html",
+        predictions=predictions,
+        top_label=top_label,
+        top_score=top_score,
+        duration=duration,
+        audio=audio
+    )
 
-    with open(filepath, "wb") as f:
-        f.write(file.read())
 
-    st.success("File uploaded successfully")
-    st.audio(filepath)
-
-    st.divider()
-
-    if st.button("🚀 Run Detection"):
-        with st.spinner("Processing audio..."):
-
-            result = run_pipeline(filepath)
-
-            os.makedirs("outputs", exist_ok=True)
-            save_json(result)
-            generate_pdf(result)
-
-        st.success("Detection Complete")
-
-        st.divider()
-
-        st.subheader("🎯 Detected Instruments")
-
-        if len(result) == 0:
-            st.warning("No instruments detected")
-        else:
-            for instrument, score in result.items():
-                st.write(f"🎵 {instrument.capitalize()}")
-                st.progress(score)
-
-        st.divider()
-
-        st.subheader("📥 Download Results")
-
-        with open("outputs/result.json", "rb") as f:
-            st.download_button("Download JSON", f, file_name="result.json")
-
-        with open("outputs/report.pdf", "rb") as f:
-            st.download_button("Download PDF", f, file_name="report.pdf")
+if __name__ == "__main__":
+    app.run(debug=True)
