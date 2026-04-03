@@ -1,6 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 import os
 import random
+import json
+from reportlab.platypus import SimpleDocTemplate, Paragraph
+from reportlab.lib.styles import getSampleStyleSheet
 
 app = Flask(__name__)
 app.secret_key = "instrunet_secret_key"
@@ -16,6 +19,16 @@ def login():
         session["user"] = request.form.get("username")
         return redirect(url_for("dashboard"))
     return render_template("login.html")
+
+
+@app.route("/download/json")
+def download_json():
+    return send_file("static/result.json", as_attachment=True)
+
+
+@app.route("/download/pdf")
+def download_pdf():
+    return send_file("static/report.pdf", as_attachment=True)
 
 
 @app.route("/dashboard", methods=["GET", "POST"])
@@ -50,6 +63,30 @@ def dashboard():
             top_label = list(predictions.keys())[0]
             top_score = predictions[top_label]
             duration = round(random.uniform(60, 180), 2)
+
+            result_data = {
+                "predictions": predictions,
+                "top_instrument": top_label,
+                "confidence": top_score,
+                "duration": duration
+            }
+
+            with open("static/result.json", "w") as f:
+                json.dump(result_data, f, indent=4)
+
+            doc = SimpleDocTemplate("static/report.pdf")
+            styles = getSampleStyleSheet()
+
+            content = []
+            content.append(Paragraph("InstruNet AI Report", styles["Title"]))
+            content.append(Paragraph(f"Top Instrument: {top_label}", styles["Normal"]))
+            content.append(Paragraph(f"Confidence: {top_score}%", styles["Normal"]))
+            content.append(Paragraph(f"Duration: {duration}s", styles["Normal"]))
+
+            for k, v in predictions.items():
+                content.append(Paragraph(f"{k}: {v}%", styles["Normal"]))
+
+            doc.build(content)
 
     return render_template(
         "dashboard.html",
