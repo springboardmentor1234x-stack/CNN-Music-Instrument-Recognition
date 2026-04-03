@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>InstruNet AI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://unpkg.com/wavesurfer.js@6"></script>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>🎧 Control Panel</h2>
+
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required>
+        <input type="range" name="threshold" min="0" max="1" step="0.01">
+        <button type="submit">Analyze Audio</button>
+    </form>
+</div>
+
+<div class="main">
+    <h1>🎵 InstruNet AI Dashboard</h1>
+
+    {% if audio %}
+    <div class="card">
+        <h3>Waveform</h3>
+        <div id="waveform"></div>
+        <button onclick="wavesurfer.playPause()">Play / Pause</button>
+    </div>
+    {% endif %}
+
+    {% if predictions %}
+    <div class="card">
+        <h3>Prediction Results</h3>
+
+        {% for label, value in predictions.items() %}
+        <p>{{ label }} ({{ value }}%)</p>
+        <div class="bar" style="width:{{ value }}%"></div>
+        {% endfor %}
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h2>{{ predictions|length }}</h2>
+            <p>Detected</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ top_label }}</h2>
+            <p>Top Instrument</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ top_score }}%</h2>
+            <p>Confidence</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ duration }}s</h2>
+            <p>Duration</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+{% if audio %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#00c6ff',
+        progressColor: '#0072ff',
+        height: 120
+    });
+
+    wavesurfer.load("{{ audio }}");
+
+    wavesurfer.on('ready', function () {
+        console.log("Waveform loaded");
+    });
+
+    wavesurfer.on('error', function (e) {
+        console.log("Error:", e);
+    });
+
+    window.wavesurfer = wavesurfer;
+});
+</script>
+{% endif %}
+
+</body>
+</html>
