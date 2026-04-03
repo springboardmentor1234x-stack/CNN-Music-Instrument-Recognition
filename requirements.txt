@@ -1,7 +1,6 @@
-streamlit
+flask
+gunicorn
 numpy
 librosa
 matplotlib
-tensorflow
-scikit-learn
 reportlab
